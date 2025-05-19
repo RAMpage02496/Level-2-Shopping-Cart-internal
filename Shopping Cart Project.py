@@ -1,16 +1,15 @@
 # Shopping Cart System - Version 1 (Basic Terminal Version)
-
 # Dictionary of common items with their prices
 common_items = {
-    "Milk": 3.50,
+    "Milk": 3.00,
     "Bread": 3.99,
-    "Eggs": 8.20,
+    "Eggs": 7.20,
     "Rice": 5.99,
     "Chicken": 8.99,
     "Apples": 1.99,
     "Bananas": 0.59,
-    "Potatoes": 3.49,
-    "Onions": 1.29,
+    "Potatoes": 5.59,
+    "Onions": 2.29,
     "Tomatoes": 3.99,
     "Pasta": 1.79,
     "Cheese": 4.49,
@@ -18,7 +17,7 @@ common_items = {
     "Butter": 3.79,
     "Orange Juice": 3.99,
     "Coffee": 7.99,
-    "Tea": 4.49,
+    "Tea": 3.29,
     "Sugar": 2.49,
     "Flour": 3.19,
     "Cereal": 4.79,
@@ -53,3 +52,16 @@ common_items = {
     "Olive Oil": 14.99,
     "Vinegar": 3.49
 }
+
+# Shopping cart structure: {"Item Name": [price, quantity]}
+cart = {}
+
+# Function to display main menu options
+def display_menu():
+    print("\nSHOPPING CART SYSTEM")
+    print("1. Add Common Item")
+    print("2. Add Custom Item")
+    print("3. Remove Item")
+    print("4. View Cart")
+    print("5. Checkout")
+    print("6. Exit")
