@@ -92,7 +92,18 @@ def add_common_item()
             print("Invalid selection!")
     except ValueError:
         print("Please enter a valid number!")
-# function to add a custom item to the cart
+# Function to add a custom item to the cart
 def add_custom_item():
     item= input("\nCustom Item Name: ")
-    
+    try:
+        price = float(input("Custom Item Price:"))
+        quantity = int (input("Custom Item Quantity:"))
+
+        if item in cart:
+            cart[item][1] += quantity
+        else:
+            cart[item] = [price,quantity]
+
+           print(f"Added {quantity}x {item} (Custom)")
+            except ValueError:
+        print("Invalid price/quantity!")
