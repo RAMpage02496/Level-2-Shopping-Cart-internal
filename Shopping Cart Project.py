@@ -65,3 +65,34 @@ def display_menu():
     print("4. View Cart")
     print("5. Checkout")
     print("6. Exit")
+
+
+# Function to add a common item to the cart
+def add_common_item()
+    print ("\nCommon Items:")
+    # show numbered list of common items
+    for i, (item, price) in enumerate(common_items.items(), 1):
+        print(f"{i}. {item} - ${price:.2f}")
+
+    try:
+        # Ask user to select an item by number
+        choice = int(input("Enter item number: "))
+        if 1 <= choice <= len(common_items):
+            item = list(common_items.keys())[choice-1]
+            quantity = int(input(f"Quantity of {item}: "))
+            
+            # If item is already in the cart, increase quantity
+            if item in cart:
+                cart[item][1] += quantity
+            else:
+                cart[item] = [common_items[item], quantity]
+            
+            print(f"Added {quantity}x {item}")
+        else:
+            print("Invalid selection!")
+    except ValueError:
+        print("Please enter a valid number!")
+# function to add a custom item to the cart
+def add_custom_item():
+    item= input("\nCustom Item Name: ")
+    
