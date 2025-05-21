@@ -146,3 +146,10 @@ def view_cart():
 
     print ("-" * 40)
     print(f"Total: ${total:.2f}")
+
+# Function to handle checkout process
+def checkout():
+    view_cart()  # Show final cart
+    if cart:
+    print("\Thank you for your purchase!")
+        cart.clear()  # Clear cart after purchase
