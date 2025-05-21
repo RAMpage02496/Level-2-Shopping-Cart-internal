@@ -104,6 +104,27 @@ def add_custom_item():
         else:
             cart[item] = [price,quantity]
 
-           print(f"Added {quantity}x {item} (Custom)")
-            except ValueError:
+        print(f"Added {quantity}x {item} (Custom)")
+     except ValueError:
         print("Invalid price/quantity!")
+
+#FUnction to remove an item from the shopping cart
+def remove_item():
+    if not cart:
+        print("Your cart is empty!")
+        return
+    
+    print("\nCURRENT ITEMS IN CART:")
+    for i, item in enumerate(cart.keys(), 1):
+        print("{i}. {item}")
+    
+    try:
+        choice = int(input("Enter item number to remove: "))
+        if 1 <= choice <= len(cart):
+            item = list(cart.keys())[choice-1]
+            del cart[item]
+            print(f"Removed {item}")
+        else:
+            print("Invalid selection!")
+    except ValueError:
+        print("Please enter a number!")
