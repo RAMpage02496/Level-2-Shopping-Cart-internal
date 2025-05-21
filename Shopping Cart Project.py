@@ -128,3 +128,21 @@ def remove_item():
             print("Invalid selection!")
     except ValueError:
         print("Please enter a number!")
+
+# Function to view the current cart with items, prices, and totals
+def view_cart():
+    if not cart:
+        print("Your car is empty!")
+        return
+    
+    print("\nYour Cart")
+    print("-" * 40)
+    total = 0
+
+    for item, (price, quantity) in cart.items():
+        item_total = price * quantity
+        total += item_total
+        print(f"{item:<20} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}")
+
+    print ("-" * 40)
+    print(f"Total: ${total:.2f}")
