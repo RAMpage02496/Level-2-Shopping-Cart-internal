@@ -153,3 +153,27 @@ def checkout():
     if cart:
     print("\Thank you for your purchase!")
         cart.clear()  # Clear cart after purchase
+    
+# Main Loop to run the program
+while True:
+    display_menu()
+    choice= input("Enter choice (1-6):")
+    if choice == "1":
+        add_common_item()
+    elif choice == "2":
+        add_custom_item()
+    elif choice == "3":
+        remove_item()
+    elif choice == "4":
+        view_cart()
+    elif choice == "5":
+        checkout()
+    elif choice == "6":
+        print("Exiting the program. Goodbye!")
+        break  # Exit the loop
+        else:
+            print("Please enter 1-6")
+    except ValueError:
+        print("Invalid input! Enter a number 1-6")
+# End of the shopping cart system
+
