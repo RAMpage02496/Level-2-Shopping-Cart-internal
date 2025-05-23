@@ -68,7 +68,7 @@ def display_menu():
 
 
 # Function to add a common item to the cart
-def add_common_item()
+def add_common_item():
     print ("\nCommon Items:")
     # show numbered list of common items
     for i, (item, price) in enumerate(common_items.items(), 1):
