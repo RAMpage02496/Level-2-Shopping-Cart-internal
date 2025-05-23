@@ -105,10 +105,10 @@ def add_custom_item():
             cart[item] = [price,quantity]
 
         print(f"Added {quantity}x {item} (Custom)")
-     except ValueError:
+    except ValueError:
         print("Invalid price/quantity!")
 
-#FUnction to remove an item from the shopping cart
+#Function to remove an item from the shopping cart
 def remove_item():
     if not cart:
         print("Your cart is empty!")
