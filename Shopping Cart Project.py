@@ -156,21 +156,22 @@ def checkout():
     
 # Main Loop to run the program
 while True:
-    display_menu()
-    choice= input("Enter choice (1-6):")
-    if choice == "1":
-        add_common_item()
-    elif choice == "2":
-        add_custom_item()
-    elif choice == "3":
-        remove_item()
-    elif choice == "4":
-        view_cart()
-    elif choice == "5":
-        checkout()
-    elif choice == "6":
-        print("Exiting the program. Goodbye!")
-        break  # Exit the loop
+    display_menu()  # Show menu options
+    try:
+        choice = int(input("Enter choice (1-6): "))
+        if choice == 1:
+            add_common_item()
+        elif choice == 2:
+            add_custom_item()
+        elif choice == 3:
+            remove_item()
+        elif choice == 4:
+            view_cart()
+        elif choice == 5:
+            checkout()
+        elif choice == 6:
+            print("Goodbye!")
+            break  # Exit the loop
         else:
             print("Please enter 1-6")
     except ValueError:
