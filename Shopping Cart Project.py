@@ -151,7 +151,7 @@ def view_cart():
 def checkout():
     view_cart()  # Show final cart
     if cart:
-    print("\Thank you for your purchase!")
+        print("\Thank you for your purchase!")
         cart.clear()  # Clear cart after purchase
     
 # Main Loop to run the program
