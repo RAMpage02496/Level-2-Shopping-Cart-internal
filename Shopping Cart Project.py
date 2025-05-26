@@ -116,7 +116,7 @@ def remove_item():
     
     print("\nCURRENT ITEMS IN CART:")
     for i, item in enumerate(cart.keys(), 1):
-        print("{i}. {item}")
+        print(f"{i}. {item}")
     
     try:
         choice = int(input("Enter item number to remove: "))
