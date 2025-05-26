@@ -132,7 +132,7 @@ def remove_item():
 # Function to view the current cart with items, prices, and totals
 def view_cart():
     if not cart:
-        print("Your car is empty!")
+        print("Your cart is empty!")
         return
     
     print("\nYour Cart")
