@@ -111,7 +111,7 @@ def add_custom_item():
 #Function to remove an item from the shopping cart
 def remove_item():
     if not cart:
-        print("Your car is empty!")
+        print("Your cart is empty!")
         return
     
     print("\nCURRENT ITEMS IN CART:")
