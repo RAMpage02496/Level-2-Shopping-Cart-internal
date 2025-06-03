@@ -61,6 +61,11 @@ restricted_items = ["Beer", "Wine"]
 # Shopping cart structure: {"Item Name": [price, quantity]}
 cart = {}
 
+# Utility function
+def confirm_action(message):
+    confirm = input(f"{message} (yes/no): ").strip().lower()
+    return confirm == "yes"
+
 # Function to display main menu options
 def display_menu():
     print("\nSHOPPING CART SYSTEM")
