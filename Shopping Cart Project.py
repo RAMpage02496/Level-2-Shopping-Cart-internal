@@ -1,4 +1,5 @@
 # Shopping Cart System - Version 2 
+# Includes: Age verification, advanced add/remove, input validation, and clean exit
 # Dictionary of common items with their prices
 common_items = {
     "Milk": 3.00,
