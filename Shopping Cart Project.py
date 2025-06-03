@@ -1,4 +1,4 @@
-# Shopping Cart System - Version 1 (Basic Terminal Version)
+# Shopping Cart System - Version 2 
 # Dictionary of common items with their prices
 common_items = {
     "Milk": 3.00,
