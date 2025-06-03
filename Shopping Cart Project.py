@@ -1,5 +1,6 @@
 # Shopping Cart System - Version 2 
 # Includes: Age verification, advanced add/remove, input validation, and clean exit
+
 # Dictionary of common items with their prices
 common_items = {
     "Milk": 3.00,
@@ -53,6 +54,9 @@ common_items = {
     "Olive Oil": 14.99,
     "Vinegar": 3.49
 }
+
+# Age-restricted items
+restricted_items = ["Beer", "Wine"]
 
 # Shopping cart structure: {"Item Name": [price, quantity]}
 cart = {}
