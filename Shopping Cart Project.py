@@ -106,19 +106,17 @@ def add_common_items(user_age):
 
 # Function to add a custom item to the cart
 def add_custom_item():
-    item= input("\nCustom Item Name: ")
+    item = input("\nEnter custom item name: ")
     try:
-        price = float(input("Custom Item Price:"))
-        quantity = int (input("Custom Item Quantity:"))
-
+        price = float(input("Enter item price: "))
+        quantity = int(input("Enter item quantity: "))
         if item in cart:
             cart[item][1] += quantity
         else:
-            cart[item] = [price,quantity]
-
+            cart[item] = [price, quantity]
         print(f"Added {quantity}x {item} (Custom)")
     except ValueError:
-        print("Invalid price/quantity!")
+        print("Invalid price or quantity!")
 
 #Function to remove an item from the shopping cart
 def remove_item():
