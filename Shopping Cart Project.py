@@ -78,30 +78,32 @@ def display_menu():
 
 
 # Function to add a common item to the cart
-def add_common_item():
-    print ("\nCommon Items:")
-    # show numbered list of common items
+def add_common_items(user_age):
+    print("\nCOMMON ITEMS:")
     for i, (item, price) in enumerate(common_items.items(), 1):
         print(f"{i}. {item} - ${price:.2f}")
 
     try:
-        # Ask user to select an item by number
-        choice = int(input("Enter item number: "))
-        if 1 <= choice <= len(common_items):
-            item = list(common_items.keys())[choice-1]
-            quantity = int(input(f"Quantity of {item}: "))
-            
-            # If item is already in the cart, increase quantity
-            if item in cart:
-                cart[item][1] += quantity
+        choices = input("Enter item numbers to add (comma-separated): ")
+        item_indexes = [int(x.strip()) for x in choices.split(",")]
+
+        for index in item_indexes:
+            if 1 <= index <= len(common_items):
+                item = list(common_items.keys())[index - 1]
+                if item in restricted_items and user_age < 18:
+                    print(f"{item} is age-restricted. Skipped.")
+                    continue
+                quantity = int(input(f"Quantity of {item}: "))
+                if item in cart:
+                    cart[item][1] += quantity
+                else:
+                    cart[item] = [common_items[item], quantity]
+                print(f"Added {quantity}x {item}")
             else:
-                cart[item] = [common_items[item], quantity]
-            
-            print(f"Added {quantity}x {item}")
-        else:
-            print("Invalid selection!")
+                print(f"Invalid item number: {index}")
     except ValueError:
-        print("Please enter a valid number!")
+        print("Invalid input! Make sure to enter item numbers separated by commas.")
+
 # Function to add a custom item to the cart
 def add_custom_item():
     item= input("\nCustom Item Name: ")
