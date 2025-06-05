@@ -167,10 +167,14 @@ def view_cart():
 
 # Function to handle checkout process
 def checkout():
-    view_cart()  # Show final cart
-    if cart:
-        print("\Thank you for your purchase!")
-        cart.clear()  # Clear cart after purchase
+    if not cart:
+        print("Your cart is empty!")
+        return
+    view_cart()
+    if confirm_action("Are you sure you want to checkout?"):
+        print("Thank you for your purchase!")
+        cart.clear()
+        exit()
     
 # Main Loop to run the program
 while True:
