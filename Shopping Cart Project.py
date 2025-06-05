@@ -175,6 +175,13 @@ def checkout():
         print("Thank you for your purchase!")
         cart.clear()
         exit()
+
+# Exit the program function
+def exit_program():
+    if confirm_actin("Are you sure you want to exit?"):
+        print("Godbye!")
+        exit()
+
     
 # Main Loop to run the program
 while True:
