@@ -119,25 +119,33 @@ def add_custom_item():
         print("Invalid price or quantity!")
 
 #Function to remove an item from the shopping cart
-def remove_item():
+def remove_items():
     if not cart:
         print("Your cart is empty!")
         return
-    
+
     print("\nCURRENT ITEMS IN CART:")
     for i, item in enumerate(cart.keys(), 1):
-        print(f"{i}. {item}")
-    
+        print(f"{i}. {item} ({cart[item][1]}x)")
+
     try:
-        choice = int(input("Enter item number to remove: "))
-        if 1 <= choice <= len(cart):
-            item = list(cart.keys())[choice-1]
-            del cart[item]
-            print(f"Removed {item}")
-        else:
-            print("Invalid selection!")
+        choices = input("Enter item numbers to remove (comma-separated): ")
+        item_indexes = [int(x.strip()) for x in choices.split(",")]
+
+        for index in item_indexes:
+            if 1 <= index <= len(cart):
+                item = list(cart.keys())[index - 1]
+                qty = int(input(f"How many of {item} would you like to remove? "))
+                if qty >= cart[item][1]:
+                    del cart[item]
+                    print(f"Removed all of {item}")
+                else:
+                    cart[item][1] -= qty
+                    print(f"Removed {qty}x {item}")
+            else:
+                print(f"Invalid item number: {index}")
     except ValueError:
-        print("Please enter a number!")
+        print("Invalid input! Make sure to enter valid numbers.")
 
 # Function to view the current cart with items, prices, and totals
 def view_cart():
