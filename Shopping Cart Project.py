@@ -184,6 +184,18 @@ def exit_program():
 
     
 # Main Loop to run the program
+def main():
+    print("Welcome to the Shopping Cart System!")
+    while True:
+        try:
+            user_age = int(input("Please enter your age:"))
+            if user_age < 0:
+                print("Age must be positive.")
+                continue
+            break
+        except ValueError:
+            print("Please enter a valid number for age.")
+
 while True:
     display_menu()  # Show menu options
     try:
@@ -199,6 +211,7 @@ while True:
         elif choice == 5:
             checkout()
         elif choice == 6:
+            exit_program()
             print("Goodbye!")
             break  # Exit the loop
         else:
@@ -207,3 +220,4 @@ while True:
         print("Invalid input! Enter a number 1-6")
 # End of the shopping cart system
 
+main()  # Start the program
