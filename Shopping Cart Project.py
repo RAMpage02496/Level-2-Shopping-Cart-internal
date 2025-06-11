@@ -1,4 +1,3 @@
-# Shopping Cart System - Version 1 
 # Dictionary of common items with their prices
 common_items = {
     "Milk": 3.00,
@@ -46,15 +45,23 @@ common_items = {
     "Soda": 5.99,
     "Beer": 12.99,
     "Wine": 15.99,
-    "Chips": 3.49,  
+    "Chips": 3.49,
     "Crackers": 2.99,
     "Nuts": 5.99,
     "Olive Oil": 14.99,
     "Vinegar": 3.49
 }
 
+# Age-restricted items
+restricted_items = ["Beer", "Wine"]
+
 # Shopping cart structure: {"Item Name": [price, quantity]}
 cart = {}
+
+# Utility function
+def confirm_action(message):
+    confirm = input(f"{message} (yes/no): ").strip().lower()
+    return confirm == "yes"
 
 # Function to display main menu options
 def display_menu():
@@ -66,68 +73,87 @@ def display_menu():
     print("5. Checkout")
     print("6. Exit")
 
-
 # Function to add a common item to the cart
-def add_common_item():
-    print ("\nCommon Items:")
-    # show numbered list of common items
+def add_common_items(user_age):
+    print("\nCOMMON ITEMS:")
     for i, (item, price) in enumerate(common_items.items(), 1):
         print(f"{i}. {item} - ${price:.2f}")
 
     try:
-        # Ask user to select an item by number
-        choice = int(input("Enter item number: "))
-        if 1 <= choice <= len(common_items):
-            item = list(common_items.keys())[choice-1]
-            quantity = int(input(f"Quantity of {item}: "))
-            
-            # If item is already in the cart, increase quantity
-            if item in cart:
-                cart[item][1] += quantity
+        choices = input("Enter item numbers to add (comma-separated): ")
+        item_indexes = [int(x.strip()) for x in choices.split(",")]
+
+        for index in item_indexes:
+            if 1 <= index <= len(common_items):
+                item = list(common_items.keys())[index - 1]
+                if item in restricted_items and user_age < 18:
+                    print(f"{item} is age-restricted. Skipped.")
+                    continue
+                quantity = int(input(f"Quantity of {item}: "))
+                if quantity <= 0:
+                    print("Quantity must be greater than 0. Please try again.")
+                    continue
+                if quantity > 800:
+                    print("You cannot add more than 800 units of an item. Please try again.")
+                    continue
+                if item in cart:
+                    cart[item][1] += quantity
+                else:
+                    cart[item] = [common_items[item], quantity]
+                print(f"Added {quantity}x {item}")
             else:
-                cart[item] = [common_items[item], quantity]
-            
-            print(f"Added {quantity}x {item}")
-        else:
-            print("Invalid selection!")
+                print(f"Invalid item number: {index}")
     except ValueError:
-        print("Please enter a valid number!")
+        print("Invalid input! Make sure to enter item numbers separated by commas.")
+
 # Function to add a custom item to the cart
 def add_custom_item():
-    item= input("\nCustom Item Name: ")
+    item = input("\nEnter custom item name: ")
     try:
-        price = float(input("Custom Item Price:"))
-        quantity = int (input("Custom Item Quantity:"))
-
+        price = float(input("Enter item price: "))
+        quantity = int(input("Enter item quantity: "))
+        if quantity <= 0:
+            print("Quantity must be greater than 0. Please try again.")
+            return
+        if quantity > 800:
+            print("You cannot add more than 800 units of an item. Please try again.")
+            return
         if item in cart:
             cart[item][1] += quantity
         else:
-            cart[item] = [price,quantity]
-
+            cart[item] = [price, quantity]
         print(f"Added {quantity}x {item} (Custom)")
     except ValueError:
-        print("Invalid price/quantity!")
+        print("Invalid price or quantity!")
 
-#Function to remove an item from the shopping cart
-def remove_item():
+# Function to remove an item from the shopping cart
+def remove_items():
     if not cart:
         print("Your cart is empty!")
         return
-    
+
     print("\nCURRENT ITEMS IN CART:")
     for i, item in enumerate(cart.keys(), 1):
-        print(f"{i}. {item}")
-    
+        print(f"{i}. {item} ({cart[item][1]}x)")
+
     try:
-        choice = int(input("Enter item number to remove: "))
-        if 1 <= choice <= len(cart):
-            item = list(cart.keys())[choice-1]
-            del cart[item]
-            print(f"Removed {item}")
-        else:
-            print("Invalid selection!")
+        choices = input("Enter item numbers to remove (comma-separated): ")
+        item_indexes = [int(x.strip()) for x in choices.split(",")]
+
+        for index in item_indexes:
+            if 1 <= index <= len(cart):
+                item = list(cart.keys())[index - 1]
+                qty = int(input(f"How many of {item} would you like to remove? "))
+                if qty >= cart[item][1]:
+                    del cart[item]
+                    print(f"Removed all of {item}")
+                else:
+                    cart[item][1] -= qty
+                    print(f"Removed {qty}x {item}")
+            else:
+                print(f"Invalid item number: {index}")
     except ValueError:
-        print("Please enter a number!")
+        print("Invalid input! Make sure to enter valid numbers.")
 
 # Function to view the current cart with items, prices, and totals
 def view_cart():
@@ -144,37 +170,60 @@ def view_cart():
         total += item_total
         print(f"{item:<20} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}")
 
-    print ("-" * 40)
+    print("-" * 40)
     print(f"Total: ${total:.2f}")
 
 # Function to handle checkout process
 def checkout():
-    view_cart()  # Show final cart
-    if cart:
-        print("\Thank you for your purchase!")
-        cart.clear()  # Clear cart after purchase
-    
+    if not cart:
+        print("Your cart is empty!")
+        return
+    view_cart()
+    if confirm_action("Are you sure you want to checkout?"):
+        print("Thank you for your purchase!")
+        cart.clear()
+        exit()
+
+# Exit the program function
+def exit_program():
+    if confirm_action("Are you sure you want to exit?"):
+        print("Goodbye!")
+        exit()
+
 # Main Loop to run the program
+def main():
+    print("Welcome to the Shopping Cart System!")
+    while True:
+        try:
+            user_age = int(input("Please enter your age: "))
+            if user_age < 5 or user_age > 100:
+                print("Age must be between 5 and 100.")
+                continue
+            return user_age
+        except ValueError:
+            print("Please enter a valid number for age.")
+
+# Run the program
+user_age = main()
+
 while True:
-    display_menu()  # Show menu options
+    display_menu()
     try:
         choice = int(input("Enter choice (1-6): "))
         if choice == 1:
-            add_common_item()
+            add_common_items(user_age)
         elif choice == 2:
             add_custom_item()
         elif choice == 3:
-            remove_item()
+            remove_items()
         elif choice == 4:
             view_cart()
         elif choice == 5:
             checkout()
         elif choice == 6:
-            print("Goodbye!")
-            break  # Exit the loop
+            exit_program()
+            break
         else:
-            print("Please enter 1-6")
+            print("Invalid input! Enter a number 1-6")
     except ValueError:
         print("Invalid input! Enter a number 1-6")
-# End of the shopping cart system
-
