@@ -45,7 +45,7 @@ common_items = {
     "Soda": 5.99,
     "Beer": 12.99,
     "Wine": 15.99,
-    "Chips": 3.49,  
+    "Chips": 3.49,
     "Crackers": 2.99,
     "Nuts": 5.99,
     "Olive Oil": 14.99,
@@ -73,7 +73,6 @@ def display_menu():
     print("5. Checkout")
     print("6. Exit")
 
-
 # Function to add a common item to the cart
 def add_common_items(user_age):
     print("\nCOMMON ITEMS:")
@@ -91,6 +90,12 @@ def add_common_items(user_age):
                     print(f"{item} is age-restricted. Skipped.")
                     continue
                 quantity = int(input(f"Quantity of {item}: "))
+                if quantity <= 0:
+                    print("Quantity must be greater than 0. Please try again.")
+                    continue
+                if quantity > 800:
+                    print("You cannot add more than 800 units of an item. Please try again.")
+                    continue
                 if item in cart:
                     cart[item][1] += quantity
                 else:
@@ -107,6 +112,12 @@ def add_custom_item():
     try:
         price = float(input("Enter item price: "))
         quantity = int(input("Enter item quantity: "))
+        if quantity <= 0:
+            print("Quantity must be greater than 0. Please try again.")
+            return
+        if quantity > 800:
+            print("You cannot add more than 800 units of an item. Please try again.")
+            return
         if item in cart:
             cart[item][1] += quantity
         else:
@@ -115,7 +126,7 @@ def add_custom_item():
     except ValueError:
         print("Invalid price or quantity!")
 
-#Function to remove an item from the shopping cart
+# Function to remove an item from the shopping cart
 def remove_items():
     if not cart:
         print("Your cart is empty!")
@@ -159,7 +170,7 @@ def view_cart():
         total += item_total
         print(f"{item:<20} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}")
 
-    print ("-" * 40)
+    print("-" * 40)
     print(f"Total: ${total:.2f}")
 
 # Function to handle checkout process
@@ -176,23 +187,23 @@ def checkout():
 # Exit the program function
 def exit_program():
     if confirm_action("Are you sure you want to exit?"):
-        print("Godbye!")
+        print("Goodbye!")
         exit()
 
-    
 # Main Loop to run the program
 def main():
     print("Welcome to the Shopping Cart System!")
     while True:
         try:
             user_age = int(input("Please enter your age: "))
-            if user_age < 0:
-                print("Age must be positive.")
+            if user_age < 5 or user_age > 100:
+                print("Age must be between 5 and 100.")
                 continue
             return user_age
         except ValueError:
             print("Please enter a valid number for age.")
 
+# Run the program
 user_age = main()
 
 while True:
