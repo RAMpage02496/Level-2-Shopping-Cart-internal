@@ -167,21 +167,17 @@ def remove_items():
 # Function to view the current cart with items, prices, and totals
 def view_cart():
     if not cart:
-        print("Your cart is empty!")
+        eg.msgbox("Your cart is empty.")
         return
-    
-    print("\nYour Cart")
-    print("-" * 40)
+    msg = ""
     total = 0
-
     for item, (price, quantity) in cart.items():
         item_total = price * quantity
         total += item_total
-        print(f"{item:<20} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}")
-
-    print("-" * 40)
-    print(f"Total: ${total:.2f}")
-
+        msg += f"{item:<25} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}\n"
+    msg += "\n" + "-" * 40 + f"\nTotal: ${total:.2f}"
+    eg.textbox("Your Cart", text=msg)
+    
 # Function to handle checkout process
 def checkout():
     if not cart:
