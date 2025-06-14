@@ -190,27 +190,29 @@ def checkout():
         cart.clear()
         exit()
 
-# Run the program
-user_age = main()
-
-while True:
-    display_menu()
-    try:
-        choice = int(input("Enter choice (1-6): "))
-        if choice == 1:
+# Main loop 
+def main():
+    user_age = get_ages()
+    while True:
+        choice = eh.buttonbox("Choose an option:", "Main Menu", choices=[
+            "Add Common Item", "Add Custom Item", "Remove Item",
+            "View Cart", "Checkout", "Exit"
+        ])
+        if choice is None:
+            if eg.ynbox("Are you sure you want to exit?"):
+                break
+            else:
+                continue
+        elif choice == "Add Commn Item":
             add_common_items(user_age)
-        elif choice == 2:
-            add_custom_item()
-        elif choice == 3:
+        elif choice == "Add Custom Item":
+            add_custom_item(user_age)
+        elif choice == "Remove Item":
             remove_items()
-        elif choice == 4:
+        elif choice == "View Cart":
             view_cart()
-        elif choice == 5:
+        elif choice == "Checkout":
             checkout()
-        elif choice == 6:
-            exit_program()
-            break
-        else:
-            print("Invalid input! Enter a number 1-6")
-    except ValueError:
-        print("Invalid input! Enter a number 1-6")
+        elif choice == "Exit":
+            if eg.ynbox("Are you sure you want to exit?"):
+                break
