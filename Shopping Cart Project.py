@@ -146,7 +146,7 @@ def remove_items():
     if not choices:
         return
     for choice in choices:
-        item = choice.split(" (")[0]
+        item = choice.split(" ("){0}
         qty_str = eg.enterbox(f"How many of '{item}' would you like to remove?")
         if qty_str is None:
             continue
@@ -169,7 +169,7 @@ def view_cart():
     if not cart:
         eg.msgbox("Your cart is empty.")
         return
-    msg = ""
+      msg = ""
     total = 0
     for item, (price, quantity) in cart.items():
         item_total = price * quantity
@@ -177,17 +177,16 @@ def view_cart():
         msg += f"{item:<25} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}\n"
     msg += "\n" + "-" * 40 + f"\nTotal: ${total:.2f}"
     eg.textbox("Your Cart", text=msg)
-    
+
 # Function to handle checkout process
 def checkout():
     if not cart:
-        print("Your cart is empty!")
-        return
+        eg.msgbox("Your cart is empty.")
+        
     view_cart()
-    if confirm_action("Are you sure you want to checkout?"):
-        print("Thank you for your purchase!")
+    if eg.ynbox("Are you sure you want to checkout"):
+        eg.msgbox("thank you for your purchase!")
         cart.clear()
-        exit()
 
 # Main loop 
 def main():
