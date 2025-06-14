@@ -79,38 +79,31 @@ def get_age():
         except:
             eg.msgbox("Invalid input. Please enter a valid number (e.g., 25).")
 
-# Function to add a common item to the cart
+# Function to add a common item(s) to the cart
 def add_common_items(user_age):
-    print("\nCOMMON ITEMS:")
-    for i, (item, price) in enumerate(common_items.items(), 1):
-        print(f"{i}. {item} - ${price:.2f}")
-
-    try:
-        choices = input("Enter item numbers to add (comma-separated): ")
-        item_indexes = [int(x.strip()) for x in choices.split(",")]
-
-        for index in item_indexes:
-            if 1 <= index <= len(common_items):
-                item = list(common_items.keys())[index - 1]
-                if item in restricted_items and user_age < 18:
-                    print(f"{item} is age-restricted. Skipped.")
-                    continue
-                quantity = int(input(f"Quantity of {item}: "))
-                if quantity <= 0:
-                    print("Quantity must be greater than 0. Please try again.")
-                    continue
-                if quantity > 800:
-                    print("You cannot add more than 800 units of an item. Please try again.")
-                    continue
-                if item in cart:
-                    cart[item][1] += quantity
-                else:
-                    cart[item] = [common_items[item], quantity]
-                print(f"Added {quantity}x {item}")
+    item_list = [f"{item} - ${price:}" for item, price in common_items.items()]
+    choices = eg.multchoicebox("Select items to add:", "Common Items", item_list)
+    if not choices:
+        return
+    for choice in choices:
+        item = choice.split(" - $")[0]
+        if item in restricted_items and user_age < 18:
+            eg.msgbox(f"{item} is age-restricted and cannot be added.")
+            continue
+        quantity = eg.enterbox(f"How many of {item} would you like to add?")
+        if quantity is None:
+            continue
+        try:
+            quantity = int(quantity)
+            if quantity <= 0 or quantity > 8000:
+                raise ValueError
+            key = item + " (Common)"
+            if key in cart:
+                cart[key][1] += quantity
             else:
-                print(f"Invalid item number: {index}")
-    except ValueError:
-        print("Invalid input! Make sure to enter item numbers separated by commas.")
+                cart[key] = [common_items[item], quantity]
+        except:
+            eg.msgbox("Invalid quantity. Please enter a whole number between 1 and 800.")
 
 # Function to add a custom item to the cart
 def add_custom_item():
