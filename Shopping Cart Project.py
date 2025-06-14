@@ -1,3 +1,6 @@
+# Version 3
+import easygui as eg
+
 # Dictionary of common items with their prices
 common_items = {
     "Milk": 3.00,
@@ -54,24 +57,27 @@ common_items = {
 
 # Age-restricted items
 restricted_items = ["Beer", "Wine"]
+cart = {}
 
 # Shopping cart structure: {"Item Name": [price, quantity]}
 cart = {}
 
-# Utility function
-def confirm_action(message):
-    confirm = input(f"{message} (yes/no): ").strip().lower()
-    return confirm == "yes"
-
-# Function to display main menu options
-def display_menu():
-    print("\nSHOPPING CART SYSTEM")
-    print("1. Add Common Item")
-    print("2. Add Custom Item")
-    print("3. Remove Item")
-    print("4. View Cart")
-    print("5. Checkout")
-    print("6. Exit")
+# Ask user for age and validate
+def get_age():
+    while True:
+        age = eg.enterbox("Enter your age (must be between 5 and 100):")
+        if age is None:
+            if eg.ynbox("Are you sure you want to exit?"):
+                exit()
+            continue
+        try:
+            age = int(age)
+            if 5 <= age <= 100:
+                return age
+            else:
+                eg.msgbox("Invalid age. Please enter a number between 5 and 100.")
+        except:
+            eg.msgbox("Invalid input. Please enter a valid number (e.g., 25).")
 
 # Function to add a common item to the cart
 def add_common_items(user_age):
@@ -183,25 +189,6 @@ def checkout():
         print("Thank you for your purchase!")
         cart.clear()
         exit()
-
-# Exit the program function
-def exit_program():
-    if confirm_action("Are you sure you want to exit?"):
-        print("Goodbye!")
-        exit()
-
-# Main Loop to run the program
-def main():
-    print("Welcome to the Shopping Cart System!")
-    while True:
-        try:
-            user_age = int(input("Please enter your age: "))
-            if user_age < 5 or user_age > 100:
-                print("Age must be between 5 and 100.")
-                continue
-            return user_age
-        except ValueError:
-            print("Please enter a valid number for age.")
 
 # Run the program
 user_age = main()
