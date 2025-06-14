@@ -99,6 +99,9 @@ def add_common_items(user_age):
                 raise ValueError
             key = item + " (Common)"
             if key in cart:
+                if cart[key][1] + quantity > 800:
+                    eg.msgbox(f"Cannot add {quantity} more. You already have {cart[key][1]} of {item}. Max per item is 800.")
+                    continue
                 cart[key][1] += quantity
             else:
                 cart[key] = [common_items[item], quantity]
@@ -124,6 +127,9 @@ def add_custom_item(user_age):
             raise ValueError
         key = item + " (Custom)"
         if key in cart:
+            if cart[key][1] + quantity > 800:
+                eg.msgbox(f"Cannot add {quantity} more. You already have {cart[key][1]} of {item}. Max per item is 800.")
+                return
             cart[key][1] += quantity
         else:
             cart[key] = [price, quantity]
@@ -133,31 +139,30 @@ def add_custom_item(user_age):
 # Function to remove an item from the shopping cart
 def remove_items():
     if not cart:
-        print("Your cart is empty!")
+        eg.msgbox("Your cart is empty.")
         return
-
-    print("\nCURRENT ITEMS IN CART:")
-    for i, item in enumerate(cart.keys(), 1):
-        print(f"{i}. {item} ({cart[item][1]}x)")
-
-    try:
-        choices = input("Enter item numbers to remove (comma-separated): ")
-        item_indexes = [int(x.strip()) for x in choices.split(",")]
-
-        for index in item_indexes:
-            if 1 <= index <= len(cart):
-                item = list(cart.keys())[index - 1]
-                qty = int(input(f"How many of {item} would you like to remove? "))
-                if qty >= cart[item][1]:
-                    del cart[item]
-                    print(f"Removed all of {item}")
-                else:
-                    cart[item][1] -= qty
-                    print(f"Removed {qty}x {item}")
+    cart_items = [f"{item} ({cart[item][1]})" for item in cart]
+    choices = eg.multchoicebox("Select items to remove:", "Remove Items", cart_items)
+    if not choices:
+        return
+    for choice in choices:
+        item = choice.split(" (")[0]
+        qty_str = eg.enterbox(f"How many of '{item}' would you like to remove?")
+        if qty_str is None:
+            continue
+        try:
+            qty = int(qty_str)
+            if qty <= 0:
+                raise ValueError
+            if qty > cart[item][1]:
+                eg.msgbox(f"You only have {cart[item][1]} of {item}.")
+                continue
+            if qty == cart[item][1]:
+                del cart[item]
             else:
-                print(f"Invalid item number: {index}")
-    except ValueError:
-        print("Invalid input! Make sure to enter valid numbers.")
+                cart[item][1] -= qty
+        except:
+            eg.msgbox("Invalid input. Please enter a whole number less than or equal to the quantity you have.")
 
 # Function to view the current cart with items, prices, and totals
 def view_cart():
