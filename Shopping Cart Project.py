@@ -106,24 +106,29 @@ def add_common_items(user_age):
             eg.msgbox("Invalid quantity. Please enter a whole number between 1 and 800.")
 
 # Function to add a custom item to the cart
-def add_custom_item():
-    item = input("\nEnter custom item name: ")
+def add_custom_item(user_age):
+    item = eg.enterbox("Enter custom item name:")
+    if item is none or item.strip() == "":
+        return
+    item = item.strip()
+    if item in restricted_items and user_age < 18:
+        eg.msgbox("{item} is age-restricted and cannot be added.")
+        return
+    if item in common_items:
+        eg.msgbox(f"'{item}' is a standard item. You must use the 'Add Common Item' option.")
+        return
     try:
-        price = float(input("Enter item price: "))
-        quantity = int(input("Enter item quantity: "))
-        if quantity <= 0:
-            print("Quantity must be greater than 0. Please try again.")
-            return
-        if quantity > 800:
-            print("You cannot add more than 800 units of an item. Please try again.")
-            return
-        if item in cart:
-            cart[item][1] += quantity
+        price = float(eg.enterbox(f"Enter the price for {item} (e.g., 3.99):"))
+        quantity = int(eg.enterbox(f"Enter quantity of {item} (1 to 800):"))
+        if quantity <= 0 or quantity > 800:
+            raise ValueError
+        key = item + " (Custom)"
+        if key in cart:
+            cart[key][1] += quantity
         else:
-            cart[item] = [price, quantity]
-        print(f"Added {quantity}x {item} (Custom)")
-    except ValueError:
-        print("Invalid price or quantity!")
+            cart[key] = [price, quantity]
+    except:
+        eg.msgbox("Invalid input. Please enter a valid price (e.g., 2.99) and quantity (1 to 800).")
 
 # Function to remove an item from the shopping cart
 def remove_items():
