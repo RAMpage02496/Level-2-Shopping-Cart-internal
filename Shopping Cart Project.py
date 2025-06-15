@@ -52,18 +52,18 @@ common_items = {
     "Vinegar": 3.49
 }
 
-# Age-restricted items
+# List of items that are age-restricted (18+ only)
 restricted_items = ["Beer", "Wine"]
 
-# Shopping cart structure: {"Item Name": [price, quantity]}
+# The shopping cart is a dictionary: {"Item Name": [price, quantity]}
 cart = {}
 
-# Utility function
+# Utility function to confirm user actions with a yes/no prompt
 def confirm_action(message):
     confirm = input(f"{message} (yes/no): ").strip().lower()
     return confirm == "yes"
 
-# Function to display main menu options
+# Displays the main menu of options
 def display_menu():
     print("\nSHOPPING CART SYSTEM")
     print("1. Add Common Item")
@@ -73,16 +73,14 @@ def display_menu():
     print("5. Checkout")
     print("6. Exit")
 
-# Function to add a common item to the cart
+# Allows the user to add pre-defined items to their cart
 def add_common_items(user_age):
     print("\nCOMMON ITEMS:")
     for i, (item, price) in enumerate(common_items.items(), 1):
         print(f"{i}. {item} - ${price:.2f}")
-
     try:
         choices = input("Enter item numbers to add (comma-separated): ")
         item_indexes = [int(x.strip()) for x in choices.split(",")]
-
         for index in item_indexes:
             if 1 <= index <= len(common_items):
                 item = list(common_items.keys())[index - 1]
@@ -106,7 +104,7 @@ def add_common_items(user_age):
     except ValueError:
         print("Invalid input! Make sure to enter item numbers separated by commas.")
 
-# Function to add a custom item to the cart
+# Allows the user to add a custom item by typing its name, price, and quantity
 def add_custom_item():
     item = input("\nEnter custom item name: ")
     try:
@@ -126,20 +124,17 @@ def add_custom_item():
     except ValueError:
         print("Invalid price or quantity!")
 
-# Function to remove an item from the shopping cart
+# Lets user remove items or reduce quantity of items in their cart
 def remove_items():
     if not cart:
         print("Your cart is empty!")
         return
-
     print("\nCURRENT ITEMS IN CART:")
     for i, item in enumerate(cart.keys(), 1):
         print(f"{i}. {item} ({cart[item][1]}x)")
-
     try:
         choices = input("Enter item numbers to remove (comma-separated): ")
         item_indexes = [int(x.strip()) for x in choices.split(",")]
-
         for index in item_indexes:
             if 1 <= index <= len(cart):
                 item = list(cart.keys())[index - 1]
@@ -155,25 +150,22 @@ def remove_items():
     except ValueError:
         print("Invalid input! Make sure to enter valid numbers.")
 
-# Function to view the current cart with items, prices, and totals
+# Displays a summary of all items in the cart with totals
 def view_cart():
     if not cart:
         print("Your cart is empty!")
         return
-    
     print("\nYour Cart")
     print("-" * 40)
     total = 0
-
     for item, (price, quantity) in cart.items():
         item_total = price * quantity
         total += item_total
         print(f"{item:<20} {quantity:>3}x ${price:>5.2f} = ${item_total:>6.2f}")
-
     print("-" * 40)
     print(f"Total: ${total:.2f}")
 
-# Function to handle checkout process
+# Processes the checkout, confirms, shows total, and clears the cart
 def checkout():
     if not cart:
         print("Your cart is empty!")
@@ -184,13 +176,13 @@ def checkout():
         cart.clear()
         exit()
 
-# Exit the program function
+# Confirms with the user before exiting the program
 def exit_program():
     if confirm_action("Are you sure you want to exit?"):
         print("Goodbye!")
         exit()
 
-# Main Loop to run the program
+# Gets the user's age and ensures it's within allowed limits (5–100)
 def main():
     print("Welcome to the Shopping Cart System!")
     while True:
@@ -203,9 +195,10 @@ def main():
         except ValueError:
             print("Please enter a valid number for age.")
 
-# Run the program
+# Start the program by getting the user's age
 user_age = main()
 
+# Loop through the menu until the user chooses to exit
 while True:
     display_menu()
     try:
