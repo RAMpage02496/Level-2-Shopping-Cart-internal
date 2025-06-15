@@ -56,7 +56,7 @@ common_items = {
 }
 
 # List of items that require age verification
-restricted_items = ["Beer", "Wine"]
+restricted_items = ["Beer", "Wine", "Cigarettes", "Alcohol", "Lottery Tickets", "Vaping Products", "Adult Magazines","beer", "wine", "cigarettes", "alcohol", "lottery tickets", "vaping products", "adult magazines"]
 
 # Shopping cart to hold items as: {"Item Name": [price, quantity]}
 cart = {}
