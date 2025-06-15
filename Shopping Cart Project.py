@@ -61,149 +61,78 @@ restricted_items = ["Beer", "Wine", "Cigarettes", "Alcohol", "Lottery Tickets", 
 # Shopping cart to hold items as: {"Item Name": [price, quantity]}
 cart = {}
 
-# Function to get user's age and validate it
-def get_age():
-    while True:
-        age = eg.enterbox("Enter your age (must be between 5 and 100):")
-        if age is None:  # User pressed Cancel
-            if eg.ynbox("Are you sure you want to exit?"):
-                exit()
-            continue
-        try:
-            age = int(age)
-            if 5 <= age <= 100:
-                return age
-            else:
-                eg.msgbox("Invalid age. Please enter a number between 5 and 100.")
-        except:
-            eg.msgbox("Invalid input. Please enter a valid number (e.g., 25).")
+# Function to display main menu options
+def display_menu():
+    print("\nSHOPPING CART SYSTEM")
+    print("1. Add Common Item")
+    print("2. Add Custom Item")
+    print("3. Remove Item")
+    print("4. View Cart")
+    print("5. Checkout")
+    print("6. Exit")
 
-# Function to add selected common items to the cart
-def add_common_items(user_age):
-    # Create display list with item name and price
-    item_list = [f"{item} - ${price:.2f}" for item, price in common_items.items()]
-    choices = eg.multchoicebox("Select items to add:", "Common Items", item_list)
-    if not choices:
-        return
-    for choice in choices:
-        item = choice.split(" - $")[0]
-        
-        # Block restricted items if user is underage
-        if item in restricted_items and user_age < 18:
-            eg.msgbox(f"{item} is age-restricted and cannot be added.")
-            continue
-        
-        # Ask for quantity and validate input
-        quantity = eg.enterbox(f"How many of {item} would you like to add?")
-        if quantity is None:
-            continue
-        try:
-            quantity = int(quantity)
-            if quantity <= 0 or quantity > 800:
-                raise ValueError
-            key = item + " (Common)"
-            
-            # If item already in cart, increase quantity (if within limit)
-            if key in cart:
-                if cart[key][1] + quantity > 800:
-                    eg.msgbox(f"Cannot add {quantity} more. You already have {cart[key][1]} of {item}. Max per item is 800.")
-                    continue
-                cart[key][1] += quantity
-            else:
-                cart[key] = [common_items[item], quantity]
-        except:
-            eg.msgbox("Invalid quantity. Please enter a whole number between 1 and 800.")
 
-# Function to add a custom item not in the predefined list
-def add_custom_item(user_age):
-    item = eg.enterbox("Enter custom item name:")
-    if item is None or item.strip() == "":
-        return
-    item = item.strip()
-
-    # Block restricted or duplicate entries
-    if item in restricted_items and user_age < 18:
-        eg.msgbox(f"'{item}' is age-restricted and cannot be added.")
-        return
-    if item in common_items:
-        eg.msgbox(f"'{item}' is a standard item. You must use the 'Add Common Item' option.")
-        return
-
-    # Ask for item price and quantity
-    price_input = eg.enterbox(f"Enter the price for {item} (e.g., 3.99):")
-    if price_input is None:
-        return
+# Function to add a common item to the cart
+def add_common_item():
+    print ("\nCommon Items:")
+    # show numbered list of common items
+    for i, (item, price) in enumerate(common_items.items(), 1):
+        print(f"{i}. {item} - ${price:.2f}")
 
     try:
-        price = float(price_input)
-
-        quantity_input = eg.enterbox(f"Enter quantity of {item} (1 to 800):")
-        if quantity_input is None:
-            return
-        quantity = int(quantity_input)
-        if quantity <= 0 or quantity > 800:
-            raise ValueError
-
-        key = item + " (Custom)"
-        if key in cart:
-            if cart[key][1] + quantity > 800:
-                eg.msgbox(f"Cannot add {quantity} more. You already have {cart[key][1]} of {item}. Max per item is 800.")
-                return
-            cart[key][1] += quantity
+        # Ask user to select an item by number
+        choice = int(input("Enter item number: "))
+        if 1 <= choice <= len(common_items):
+            item = list(common_items.keys())[choice-1]
+            quantity = int(input(f"Quantity of {item}: "))
+            
+            # If item is already in the cart, increase quantity
+            if item in cart:
+                cart[item][1] += quantity
+            else:
+                cart[item] = [common_items[item], quantity]
+            
+            print(f"Added {quantity}x {item}")
         else:
-            cart[key] = [price, quantity]
-    except:
-        eg.msgbox("Invalid input. Please enter a valid price (e.g., 2.99) and quantity (1 to 800).")
+            print("Invalid selection!")
+    except ValueError:
+        print("Please enter a valid number!")
+# Function to add a custom item to the cart
+def add_custom_item():
+    item= input("\nCustom Item Name: ")
+    try:
+        price = float(input("Custom Item Price:"))
+        quantity = int (input("Custom Item Quantity:"))
 
-# Function to remove item(s) from the cart
-def remove_items():
+        if item in cart:
+            cart[item][1] += quantity
+        else:
+            cart[item] = [price,quantity]
+
+        print(f"Added {quantity}x {item} (Custom)")
+    except ValueError:
+        print("Invalid price/quantity!")
+
+#Function to remove an item from the shopping cart
+def remove_item():
     if not cart:
         eg.msgbox("Your cart is empty.")
         return
     
-    # Special handling if only one item is in the cart
-    if len(cart) == 1:
-        item = list(cart.keys())[0]
-        qty_str = eg.enterbox(f"How many of '{item}' would you like to remove? (You have {cart[item][1]})")
-        if qty_str is None:
-            return
-        try:
-            qty = int(qty_str)
-            if qty <= 0:
-                raise ValueError
-            if qty > cart[item][1]:
-                eg.msgbox(f"You only have {cart[item][1]} of {item}.")
-                return
-            if qty == cart[item][1]:
-                del cart[item]
-            else:
-                cart[item][1] -= qty
-        except:
-            eg.msgbox("Invalid input. Please enter a whole number less than or equal to the quantity you have.")
-    else:
-        # User selects multiple items to remove
-        cart_items = [f"{item} ({cart[item][1]}x)" for item in cart]
-        choices = eg.multchoicebox("Select items to remove:", "Remove Items", cart_items)
-        if not choices:
-            return
-        for choice in choices:
-            item = choice.rsplit(" (", 1)[0]
-            qty_str = eg.enterbox(f"How many of '{item}' would you like to remove? (You have {cart[item][1]})")
-            if qty_str is None:
-                continue
-            try:
-                qty = int(qty_str)
-                if qty <= 0:
-                    raise ValueError
-                if qty > cart[item][1]:
-                    eg.msgbox(f"You only have {cart[item][1]} of {item}.")
-                    continue
-                if qty == cart[item][1]:
-                    del cart[item]
-                else:
-                    cart[item][1] -= qty
-            except:
-                eg.msgbox("Invalid input. Please enter a whole number less than or equal to the quantity you have.")
+    print("\nCURRENT ITEMS IN CART:")
+    for i, item in enumerate(cart.keys(), 1):
+        print(f"{i}. {item}")
+    
+    try:
+        choice = int(input("Enter item number to remove: "))
+        if 1 <= choice <= len(cart):
+            item = list(cart.keys())[choice-1]
+            del cart[item]
+            print(f"Removed {item}")
+        else:
+            print("Invalid selection!")
+    except ValueError:
+        print("Please enter a number!")
 
 # Function to display all cart contents and the total cost
 def view_cart():
@@ -219,44 +148,37 @@ def view_cart():
     msg += "\n" + "-" * 40 + f"\nTotal: ${total:.2f}"
     eg.textbox("Your Cart", text=msg)
 
-# Function to finalize the purchase and clear the cart
-def checkout():
-    if not cart:
-        eg.msgbox("Your cart is empty.")
-        return
-        
-    view_cart()
-    if eg.ynbox("Are you sure you want to checkout"):
-        eg.msgbox("Thank you for your purchase!")
-        cart.clear()
+    print ("-" * 40)
+    print(f"Total: ${total:.2f}")
 
-# Main program loop
-def main():
-    user_age = get_age()  # Prompt user for their age first
-    while True:
-        # Main menu buttons
-        choice = eg.buttonbox("Choose an option:", "Main Menu", choices=[
-            "Add Common Item", "Add Custom Item", "Remove Item",
-            "View Cart", "Checkout", "Exit"
-        ])
-        if choice is None:
-            if eg.ynbox("Are you sure you want to exit?"):
-                break
-            else:
-                continue
-        elif choice == "Add Common Item":
-            add_common_items(user_age)
-        elif choice == "Add Custom Item":
-            add_custom_item(user_age)
-        elif choice == "Remove Item":
-            remove_items()
-        elif choice == "View Cart":
+# Function to handle checkout process
+def checkout():
+    view_cart()  # Show final cart
+    if cart:
+        print("\Thank you for your purchase!")
+        cart.clear()  # Clear cart after purchase
+    
+# Main Loop to run the program
+while True:
+    display_menu()  # Show menu options
+    try:
+        choice = int(input("Enter choice (1-6): "))
+        if choice == 1:
+            add_common_item()
+        elif choice == 2:
+            add_custom_item()
+        elif choice == 3:
+            remove_item()
+        elif choice == 4:
             view_cart()
         elif choice == "Checkout":
             checkout()
-        elif choice == "Exit":
-            if eg.ynbox("Are you sure you want to exit?"):
-                break
+        elif choice == 6:
+            print("Goodbye!")
+            break  # Exit the loop
+        else:
+            print("Please enter 1-6")
+    except ValueError:
+        print("Invalid input! Enter a number 1-6")
+# End of the shopping cart system
 
-# Run the program
-main()
