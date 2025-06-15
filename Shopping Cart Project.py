@@ -1,4 +1,4 @@
-# Version 3
+# Shopping Cart System - Version 3
 import easygui as eg
 
 # Dictionary of common items with their prices
